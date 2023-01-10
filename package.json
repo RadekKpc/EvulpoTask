@@ -1,0 +1,23 @@
+{
+  "name": "evulpo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RadekKpc/EvulpoTask.git"
+  },
+  "author": "Radoslaw Kopec",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RadekKpc/EvulpoTask/issues"
+  },
+  "homepage": "https://github.com/RadekKpc/EvulpoTask#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "morgan": "^1.10.0"
+  }
+}
