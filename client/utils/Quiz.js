@@ -36,8 +36,20 @@ const displayQuestion = (question, selectedAnswer, quiz) => {
 	});
 }
 
-const finishQuiz = () => {
-    console.log("summup score")
+const finishQuiz = (score, maxScore, quiz) => {
+	let optionsContainer = document.querySelector('#options-wrapper')
+	let questionContainer = document.querySelector('#question');
+	let categoryContainer = document.querySelector('#category');
+	let evMessage = document.querySelector('#evaluation-message')
+    let actionButton = document.querySelector('#action-button');
+
+    optionsContainer.innerHTML = "";
+    questionContainer.innerHTML = "";
+    categoryContainer.innerHTML = "";
+
+    evMessage.innerHTML = `Your score is ${score}/${maxScore}!`;
+    actionButton.innerHTML = "Try again :)";
+    actionButton.onclick = () => quiz.restart();
 }
 
 export default class Quiz {
@@ -83,7 +95,12 @@ export default class Quiz {
         if(this.isLastQuestion()) {
             let actionButton = document.querySelector('#action-button');
             actionButton.innerHTML = "Evaluate!";
-            actionButton.onclick = finishQuiz;
+            actionButton.onclick = () => {
+                let maxScore = this.questions.reduce((acc, next) => acc + next.score, 0);
+                // look at this beautiful reduce to calculate total score :)
+                let totalScore = this.questions.reduce((acc, next, i) => acc + (this.selectedAnswers[i] === next.correct_answer ? next.score : 0), 0);
+                finishQuiz(totalScore, maxScore, this);
+            }
         }
         this.currentQuestion = nextQuestion;
         displayQuestion(this.questions[nextQuestion], -1, this);
@@ -95,5 +112,17 @@ export default class Quiz {
      */
     setSelectedAnswer(selectedAnswer) {
         this.selectedAnswers[this.currentQuestion] = selectedAnswer;
+    }
+
+    restart() {
+        let evMessage = document.querySelector('#evaluation-message')
+        evMessage.innerHTML = "";
+        this.selectedAnswers = this.questions.map(_ => -1);
+        this.availableQuestions = [];
+
+        for(let i = 0; i<  this.questions.length; i++) {
+            this.availableQuestions.push(i);
+        }
+        this.startQuiz();
     }
 }
