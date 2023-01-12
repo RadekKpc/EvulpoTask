@@ -14,18 +14,22 @@
  * @param {Question} question
  * @param {number} selectedAnswer
  */
-export const setUpQuestion = (question, selectedAnswer) => {
+const setUpQuestion = (question, selectedAnswer) => {
 	let optionsContainer = document.querySelector('#options-wrapper')
 	let questionContainer = document.querySelector('#question');
 
 	question.options.forEach((option, index) => {
         if(index === selectedAnswer) {
-            optionsContainer.innerHTML+= "<div class='chosen option'><p class='text'>" + option + "</p></div>"
+            optionsContainer.innerHTML+= "<div class='option chosen'><p class='text'>" + option + "</p></div>"
         } else {
-            optionsContainer.innerHTML+= "<div class='unchosen option'><p class='text'>" + option + "</p></div>"
+            optionsContainer.innerHTML+= "<div class='option'><p class='text'>" + option + "</p></div>"
         }
 	});
 	questionContainer.innerHTML = question.question;
+}
+
+const finishQuiz = () => {
+    console.log("summup score")
 }
 
 export default class Quiz {
@@ -33,6 +37,8 @@ export default class Quiz {
         this.questions = [];
         this.selectedAnswers = [];
         this.currentQuestion = 0;
+        this.questionsCount = 0;
+        this.availableQuestions =[];
     }
 
     /**
@@ -43,9 +49,29 @@ export default class Quiz {
         this.questions = questions;
         // -1 means not selected answer
         this.selectedAnswers = questions.map(_ => -1);
+        this.questionsCount = questions.length;
+        for(let i = 0; i< this.questionsCount; i++) {
+            this.availableQuestions.push(i);
+        }
+    }
+
+    getNextQuestion() {
+        const avaiableQuestionsCount = this.availableQuestions.length;
+        const randomQuestion = this.availableQuestions[Math.floor(Math.random() * avaiableQuestionsCount)];
+        this.availableQuestions = this.availableQuestions.filter(v => v != randomQuestion)
+        return randomQuestion;
     }
 
     startQuiz() {
+        this.currentQuestion = this.getNextQuestion();
+        setUpQuestion(this.questions[this.currentQuestion], -1);
+    }
+
+    goToNextQuestion() {
+        this.currentQuestion = this.getNextQuestion();
+        if(this.currentQuestion >= this.questionsCount) {
+            finishQuiz();
+        }
         setUpQuestion(this.questions[this.currentQuestion], -1);
     }
 }
