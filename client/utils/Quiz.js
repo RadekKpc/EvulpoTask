@@ -14,16 +14,22 @@
  * @param {Question} question
  * @param {number} selectedAnswer
  */
-const setUpQuestion = (question, selectedAnswer) => {
+const setUpQuestion = (question, selectedAnswer, quiz) => {
 	let optionsContainer = document.querySelector('#options-wrapper')
 	let questionContainer = document.querySelector('#question');
+    
+    optionsContainer.innerHTML = "";
 
 	question.options.forEach((option, index) => {
-        if(index === selectedAnswer) {
-            optionsContainer.innerHTML+= "<div class='option chosen'><p class='text'>" + option + "</p></div>"
-        } else {
-            optionsContainer.innerHTML+= "<div class='option'><p class='text'>" + option + "</p></div>"
-        }
+        const optionDiv = document.createElement("div");
+        optionDiv.className = index === selectedAnswer ? 'option chosen' : 'option';
+        optionDiv.innerHTML = "<p class='text'>" + option + "</p>"
+        optionDiv.onclick = () => { 
+            quiz.setSelectedAnswer(index);
+            setUpQuestion(question, index, quiz);
+        };
+        optionsContainer.appendChild(optionDiv);
+
 	});
 	questionContainer.innerHTML = question.question;
 }
@@ -64,7 +70,7 @@ export default class Quiz {
 
     startQuiz() {
         this.currentQuestion = this.getNextQuestion();
-        setUpQuestion(this.questions[this.currentQuestion], -1);
+        setUpQuestion(this.questions[this.currentQuestion], -1, this);
     }
 
     goToNextQuestion() {
@@ -72,6 +78,14 @@ export default class Quiz {
         if(this.currentQuestion >= this.questionsCount) {
             finishQuiz();
         }
-        setUpQuestion(this.questions[this.currentQuestion], -1);
+        setUpQuestion(this.questions[this.currentQuestion], -1, this);
+    }
+
+    /**
+     * Set up answer for current question
+     * @param {number} selectedAnswer - selected answer
+     */
+    setSelectedAnswer(selectedAnswer) {
+        this.selectedAnswers[this.currentQuestion] = selectedAnswer;
     }
 }
