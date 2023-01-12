@@ -12,7 +12,7 @@ const SCOPES = "https://www.googleapis.com/auth/spreadsheets.readonly";
 
 let questionsLoaded = false;
 let domLoaded = false;
-let quiz = new Quiz();
+let quiz;
 
 document.addEventListener('DOMContentLoaded', () => { 
 	domLoaded = true;
@@ -49,7 +49,7 @@ function getExerciseData() {
 				correct_answer: parseInt(correct_answer),
 				score: parseInt(score),
 			}))
-		quiz.setQuestions(shapedQuestions);
+		quiz = new Quiz(shapedQuestions);
 		initQuiz();
 	}, (response) => { console.log('Error: ' + response.result.error.message)});
 }

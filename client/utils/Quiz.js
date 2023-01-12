@@ -14,7 +14,7 @@
  * @param {Question} question
  * @param {number} selectedAnswer
  */
-const setUpQuestion = (question, selectedAnswer, quiz) => {
+const displayQuestion = (question, selectedAnswer, quiz) => {
 	let optionsContainer = document.querySelector('#options-wrapper')
 	let questionContainer = document.querySelector('#question');
     
@@ -26,7 +26,7 @@ const setUpQuestion = (question, selectedAnswer, quiz) => {
         optionDiv.innerHTML = "<p class='text'>" + option + "</p>"
         optionDiv.onclick = () => { 
             quiz.setSelectedAnswer(index);
-            setUpQuestion(question, index, quiz);
+            displayQuestion(question, index, quiz);
         };
         optionsContainer.appendChild(optionDiv);
 
@@ -39,24 +39,18 @@ const finishQuiz = () => {
 }
 
 export default class Quiz {
-    constructor() {
-        this.questions = [];
-        this.selectedAnswers = [];
-        this.currentQuestion = 0;
-        this.questionsCount = 0;
-        this.availableQuestions =[];
-    }
 
     /**
      * Set up question, and initialize all answers to not selected
      * @param {Question} questions - The part of quize
      */
-    setQuestions(questions) {
+    constructor(questions) {
         this.questions = questions;
         // -1 means not selected answer
         this.selectedAnswers = questions.map(_ => -1);
-        this.questionsCount = questions.length;
-        for(let i = 0; i< this.questionsCount; i++) {
+        this.availableQuestions = [];
+
+        for(let i = 0; i<  questions.length; i++) {
             this.availableQuestions.push(i);
         }
     }
@@ -69,8 +63,9 @@ export default class Quiz {
     }
 
     startQuiz() {
-        this.currentQuestion = this.getNextQuestion();
-        setUpQuestion(this.questions[this.currentQuestion], -1, this);
+        let firstQuestion = this.getNextQuestion();
+        this.currentQuestion = firstQuestion;
+        displayQuestion(this.questions[firstQuestion], -1, this);
 
         let actionButton = document.querySelector('#action-button');
         actionButton.innerHTML = "Next random question";
@@ -82,14 +77,14 @@ export default class Quiz {
     }
 
     goToNextQuestion() {
-        this.currentQuestion = this.getNextQuestion();
-        let actionButton = document.querySelector('#action-button');
-
+        let nextQuestion = this.getNextQuestion();
         if(this.isLastQuestion()) {
+            let actionButton = document.querySelector('#action-button');
             actionButton.innerHTML = "Evaluate!";
             actionButton.onclick = finishQuiz;
         }
-        setUpQuestion(this.questions[this.currentQuestion], -1, this);
+        this.currentQuestion = nextQuestion;
+        displayQuestion(this.questions[nextQuestion], -1, this);
     }
 
     /**
