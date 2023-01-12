@@ -4,10 +4,6 @@ const morgan = require('morgan');
 const path = require('path');
 const env = process.env.NODE_ENV || 'development';
 
-app.get('/api/questions', (req, res) => {
-  res.send('Questions from GAPI in the future!')
-})
-
 if(env == 'development') { 
     app.use((req, res, next) => {
         res.header("Access-Control-Allow-Origin", "*");
