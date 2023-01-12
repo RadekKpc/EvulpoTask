@@ -46,8 +46,8 @@ function getExerciseData() {
 				id,
 				question,
 				options: options.split(";"),
-				correct_answer,
-				score
+				correct_answer: parseInt(correct_answer),
+				score: parseInt(score),
 			}))
 		quiz.setQuestions(shapedQuestions);
 		initQuiz();
@@ -56,6 +56,6 @@ function getExerciseData() {
 
 function initQuiz(){
 	if(questionsLoaded && domLoaded) {
-		quiz.loadQuestions();
+		quiz.startQuiz();
 	}
 }

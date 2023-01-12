@@ -9,10 +9,30 @@
  * @property {number} score - indicates how difficult the question is
  */
 
+/**
+ * Render the question
+ * @param {Question} question
+ * @param {number} selectedAnswer
+ */
+export const setUpQuestion = (question, selectedAnswer) => {
+	let optionsContainer = document.querySelector('#options-wrapper')
+	let questionContainer = document.querySelector('#question');
+
+	question.options.forEach((option, index) => {
+        if(index === selectedAnswer) {
+            optionsContainer.innerHTML+= "<div class='chosen option'><p class='text'>" + option + "</p></div>"
+        } else {
+            optionsContainer.innerHTML+= "<div class='unchosen option'><p class='text'>" + option + "</p></div>"
+        }
+	});
+	questionContainer.innerHTML = question.question;
+}
+
 export default class Quiz {
     constructor() {
         this.questions = [];
         this.selectedAnswers = [];
+        this.currentQuestion = 0;
     }
 
     /**
@@ -25,7 +45,7 @@ export default class Quiz {
         this.selectedAnswers = questions.map(_ => -1);
     }
 
-    loadQuestions() {
-        console.log(this.questions)   
+    startQuiz() {
+        setUpQuestion(this.questions[this.currentQuestion], -1);
     }
 }
