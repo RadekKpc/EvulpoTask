@@ -8,20 +8,22 @@
 	<link href="style.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-	<p id="question" class="question"> Which is the correct option? </p>
-	<div id="options-wrapper">
-		
+	<div class="quiz-container">
+		<div></div>
+		<div class="question-container">
+			<p id="question" class="question"> Which is the correct option? </p>
+			<div id="options-wrapper" class="options-wrapper"></div>
+		</div>
+		<div class="buttons-container">
+			<div id="evaluate" class="action-button" onclick="myEvaluation()">Evaluate!</div>
+			<div id="next" class="action-button" onClick="window.location.reload();">Next random question</div>
+		</div>
+		<div id="evaluation-message"></div>
 	</div>
-
-	<button id="evaluate" onclick="myEvaluation()">Evaluate!</button>
-	<div id="evaluation-message"></div>
-
-	<button id="next" onClick="window.location.reload();" style="display:none;">Next random question</button>
 
     <script async defer src="https://apis.google.com/js/api.js"
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()">
     </script>
-
 </body>
 </html>
