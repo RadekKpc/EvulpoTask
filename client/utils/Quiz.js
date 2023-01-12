@@ -17,8 +17,11 @@
 const displayQuestion = (question, selectedAnswer, quiz) => {
 	let optionsContainer = document.querySelector('#options-wrapper')
 	let questionContainer = document.querySelector('#question');
+	let categoryContainer = document.querySelector('#category');
     
     optionsContainer.innerHTML = "";
+    categoryContainer.innerHTML = "Category: " + question.topic;
+	questionContainer.innerHTML = question.question;
 
 	question.options.forEach((option, index) => {
         const optionDiv = document.createElement("div");
@@ -31,7 +34,6 @@ const displayQuestion = (question, selectedAnswer, quiz) => {
         optionsContainer.appendChild(optionDiv);
 
 	});
-	questionContainer.innerHTML = question.question;
 }
 
 const finishQuiz = () => {
