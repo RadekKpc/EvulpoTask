@@ -71,12 +71,23 @@ export default class Quiz {
     startQuiz() {
         this.currentQuestion = this.getNextQuestion();
         setUpQuestion(this.questions[this.currentQuestion], -1, this);
+
+        let actionButton = document.querySelector('#action-button');
+        actionButton.innerHTML = "Next random question";
+        actionButton.onclick = () => { this.goToNextQuestion(); };
+    }
+
+    isLastQuestion() {
+        return this.availableQuestions.length === 0
     }
 
     goToNextQuestion() {
         this.currentQuestion = this.getNextQuestion();
-        if(this.currentQuestion >= this.questionsCount) {
-            finishQuiz();
+        let actionButton = document.querySelector('#action-button');
+
+        if(this.isLastQuestion()) {
+            actionButton.innerHTML = "Evaluate!";
+            actionButton.onclick = finishQuiz;
         }
         setUpQuestion(this.questions[this.currentQuestion], -1, this);
     }
