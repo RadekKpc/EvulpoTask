@@ -1,5 +1,6 @@
 import { initializeHintButton, hideHintButton } from './hintButtonUtils';
 import { clearEvaluationMessage, setUpActionButton, finishQuiz } from './quizUtils';
+import { initializeProgressBar, markPoint, markStepAsInProgress } from './progressBar';
 
 /**
  * The complete question
@@ -18,7 +19,7 @@ import { clearEvaluationMessage, setUpActionButton, finishQuiz } from './quizUti
  * @param {number} selectedAnswer
  */
 const displayQuestion = (question, selectedAnswer, quiz) => {
-	let optionsContainer = document.querySelector('#options-wrapper')
+	let optionsContainer = document.querySelector('#options-wrapper');
 	let questionContainer = document.querySelector('#question');
 	let categoryContainer = document.querySelector('#category');
     
@@ -29,7 +30,7 @@ const displayQuestion = (question, selectedAnswer, quiz) => {
 	question.options.forEach((option, index) => {
         const optionDiv = document.createElement("div");
         optionDiv.className = index === selectedAnswer ? 'option chosen' : 'option';
-        optionDiv.innerHTML = "<p class='text'>" + option + "</p>"
+        optionDiv.innerHTML = "<p class='text'>" + option + "</p>";
         optionDiv.onclick = () => { 
             quiz.setSelectedAnswer(index);
             displayQuestion(question, index, quiz);
@@ -69,6 +70,7 @@ export default class Quiz {
         displayQuestion(this.questions[firstQuestion], -1, this);
         setUpActionButton("Next random question",  () => this.goToNextQuestion())
         initializeHintButton(this.questions[firstQuestion].correct_answer);
+        initializeProgressBar(this.questions.length);
     }
 
     isLastQuestion() {
@@ -88,6 +90,8 @@ export default class Quiz {
         this.currentQuestion = nextQuestion;
         displayQuestion(this.questions[nextQuestion], -1, this);
         initializeHintButton(this.questions[nextQuestion].correct_answer);
+        // markPoint();
+        // markStepAsInProgress();
     }
 
     /**
