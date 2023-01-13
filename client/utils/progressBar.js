@@ -1,10 +1,11 @@
 
 const createProgressPoint = (index) => {
     const progressPointContainer = document.createElement("div");
-    progressPointContainer.className = 'progress-dot-container';
+    progressPointContainer.className = 'progress-point-container';
+    progressPointContainer.id = `progress-point-container-${index}`;
     const progressPoint = document.createElement("div");
-    progressPoint.className = 'progress-dot';
-    progressPoint.id = `progress-dot-${index}`;
+    progressPoint.className = 'progress-point';
+    progressPoint.id = `progress-point-${index}`;
 
     progressPointContainer.appendChild(progressPoint);
     return progressPointContainer;
@@ -12,8 +13,7 @@ const createProgressPoint = (index) => {
 
 const createProgressBarLine = (index) => {
     const progressBarLine = document.createElement("div");
-    progressBarLine.className = `progress-bar-line`;
-    progressBarLine.id = `progress-bar-line-${index}`;
+    progressBarLine.className = `progress-bar-line progress-bar-line-${index}`;
     return progressBarLine;
 }
 
@@ -25,14 +25,20 @@ export const initializeProgressBar = (pointCount) => {
     let progressBarContainer = document.querySelector('#progress-bar-container');
     progressBarContainer.innerHTML = "";
 
-    console.log(progressBarContainer);
     for(let i =0 ; i< pointCount; i++) {
         if(i == 0) {
             progressBarContainer.appendChild(createProgressPoint(i));
             continue;
         }
+        if (i == pointCount -1) {
+            progressBarContainer.appendChild(createProgressBarLine(i));
+            progressBarContainer.appendChild(createProgressPoint(i)); 
+            continue;
+        }
+
         progressBarContainer.appendChild(createProgressBarLine(i));
         progressBarContainer.appendChild(createProgressPoint(i));
+        progressBarContainer.appendChild(createProgressBarLine(i));
     }
 }
 
@@ -42,7 +48,7 @@ export const initializeProgressBar = (pointCount) => {
  * @param {boolean} isCorrect true -> green, false -> red
  */
 export const markPoint = (pointIndex, isCorrect) => {
-    let progressPoint = document.querySelector(`#progress-dot-${pointIndex}`);
+    const progressPoint = document.querySelector(`#progress-point-${pointIndex}`);
     progressPoint.className += isCorrect ? " green_border" : " red_border";
 }
 
@@ -52,10 +58,15 @@ export const markPoint = (pointIndex, isCorrect) => {
  * @param {number} pointCount point count in the progress bar
  */
 export const markStepAsInProgress = (stepIndex, pointCount) => {
-    for(let i = 1; i <= pointCount; i++) {
-        let progressBarLine = document.querySelector(`#progress-bar-line-${index}`);
-        progressBarLine.className = `progress-bar-line`;
-        if(i <= stepIndex) progressBarLine.className +=  ' grey_background';
-        
+    for(let i = 0; i < pointCount; i++) {
+        let progressPointContainer = document.querySelector(`#progress-point-container-${i}`);
+        progressPointContainer.className = "progress-point-container";
+        if(i <= stepIndex) progressPointContainer.className += ' gray_background';
+
+        let progressBarLines = document.getElementsByClassName(`progress-bar-line-${i}`);
+        [...progressBarLines].forEach((line) => {
+            line.className = `progress-bar-line progress-bar-line-${i}`;
+            if(i <= stepIndex) line.className += ' gray_background';
+        });
     }
 }

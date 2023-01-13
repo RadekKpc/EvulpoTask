@@ -51,7 +51,7 @@ export default class Quiz {
         // -1 means not selected answer
         this.selectedAnswers = questions.map(_ => -1);
         this.availableQuestions = [];
-
+        this.stepCounter = 0;
         for(let i = 0; i<  questions.length; i++) {
             this.availableQuestions.push(i);
         }
@@ -77,7 +77,15 @@ export default class Quiz {
         return this.availableQuestions.length === 0
     }
 
+    checkCurrentAnswer() {
+        return this.selectedAnswers[this.currentQuestion] === this.questions[this.currentQuestion].correct_answer;
+    }
+
     goToNextQuestion() {
+        this.stepCounter += 1;
+        markPoint(this.stepCounter -1, this.checkCurrentAnswer());
+        markStepAsInProgress(this.stepCounter, this.questions.length);
+    
         let nextQuestion = this.getNextQuestion();
         if(this.isLastQuestion()) {
             setUpActionButton("Evaluate!", () => {
@@ -85,13 +93,12 @@ export default class Quiz {
                 // look at this beautiful reduce to calculate total score :)
                 let totalScore = this.questions.reduce((acc, next, i) => acc + (this.selectedAnswers[i] === next.correct_answer ? next.score : 0), 0);
                 finishQuiz(totalScore, maxScore, () => this.restart());
+                markPoint(this.stepCounter, this.checkCurrentAnswer());
             })
         }
         this.currentQuestion = nextQuestion;
         displayQuestion(this.questions[nextQuestion], -1, this);
         initializeHintButton(this.questions[nextQuestion].correct_answer);
-        // markPoint();
-        // markStepAsInProgress();
     }
 
     /**
@@ -111,5 +118,6 @@ export default class Quiz {
             this.availableQuestions.push(i);
         }
         this.startQuiz();
+        this.stepCounter = 0;
     }
 }

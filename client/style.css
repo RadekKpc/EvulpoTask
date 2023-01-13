@@ -30,18 +30,6 @@ body {
 	transition: 0.3s;
 }
 
-.grey_background {
-	background-color: rgb(99 99 99);
-}
-
-.red_border {
-	border-color: rgb(255, 85, 85);
-}
-
-.green_border {
-	border-color: rgb(128, 245, 18);
-}
-
 .chosen {
 	border-color: rgb(99 99 99);
 	transition: all 0.15s;
@@ -132,22 +120,24 @@ body {
 	height: 30px;
 	background-color: rgb(236, 236, 236);
 	border-width: 3px;
+	transition: 0.3s;
 }
 
-.progress-dot-container {
+.progress-point-container {
 	display: inline-block;
 	width: 30px;
 	height: 30px;
 	background-color: rgb(236, 236, 236);;
 }
 
-.progress-dot {
+.progress-point {
 	display: inline-block;
 	width: 24px;
 	height: 24px;
 	background-color: white;
 	border: 3px solid rgb(236, 236, 236);
 	border-radius: 20px;
+	transition: 0.3s;
 }
 
 .progress-bar-container {
@@ -155,12 +145,24 @@ body {
 	top: 50px;
 }
 
-.progress-dot-container:first-child {
+.progress-point-container:first-child {
 	border-top-left-radius: 20px;
 	border-bottom-left-radius: 20px;
 }
 
-.progress-dot-container:last-child {
+.progress-point-container:last-child {
 	border-top-right-radius: 20px;
 	border-bottom-right-radius: 20px;
+}
+
+.gray_background {
+	background-color: rgb(220, 220, 220);
+}
+
+.red_border {
+	border-color: rgb(255, 85, 85);
+}
+
+.green_border {
+	border-color: rgb(128, 245, 18);
 }
