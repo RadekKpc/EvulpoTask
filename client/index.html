@@ -11,15 +11,15 @@
 	<div class="quiz-container">
 		<div class="question-container">
 			<p id="category" class="question"></p>
-			<p id="question" class="question"> Which is the correct option? </p>
+			<p id="question" class="question">Loading quiz...</p>
 			<div id="options-wrapper" class="options-wrapper"></div>
 		</div>
-		<div id="evaluation-message"></div>
+		<div id="evaluation-message" class="question"></div>
 		<div class="buttons-container">
 			<div id="action-button" class="action-button"></div>
 		</div>
+		<div id="hint-button" class="hint-button">show the answers</div>
 	</div>
-
     <script async defer src="https://apis.google.com/js/api.js"
       onload="this.onload=function(){};handleClientLoad()"
       onreadystatechange="if (this.readyState === 'complete') this.onload()">

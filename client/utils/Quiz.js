@@ -1,3 +1,5 @@
+import { initializeHintButton, hideHintButton } from './hintButtonUtils';
+
 /**
  * The complete question
  * @typedef {Object} Question
@@ -37,10 +39,10 @@ const displayQuestion = (question, selectedAnswer, quiz) => {
 }
 
 const finishQuiz = (score, maxScore, quiz) => {
-	let optionsContainer = document.querySelector('#options-wrapper')
+	let optionsContainer = document.querySelector('#options-wrapper');
 	let questionContainer = document.querySelector('#question');
 	let categoryContainer = document.querySelector('#category');
-	let evMessage = document.querySelector('#evaluation-message')
+	let evMessage = document.querySelector('#evaluation-message');
     let actionButton = document.querySelector('#action-button');
 
     optionsContainer.innerHTML = "";
@@ -50,7 +52,10 @@ const finishQuiz = (score, maxScore, quiz) => {
     evMessage.innerHTML = `Your score is ${score}/${maxScore}!`;
     actionButton.innerHTML = "Try again :)";
     actionButton.onclick = () => quiz.restart();
+
+    hideHintButton();
 }
+
 
 export default class Quiz {
 
@@ -84,6 +89,8 @@ export default class Quiz {
         let actionButton = document.querySelector('#action-button');
         actionButton.innerHTML = "Next random question";
         actionButton.onclick = () => { this.goToNextQuestion(); };
+
+        initializeHintButton(this.questions[firstQuestion].correct_answer);
     }
 
     isLastQuestion() {
@@ -104,6 +111,8 @@ export default class Quiz {
         }
         this.currentQuestion = nextQuestion;
         displayQuestion(this.questions[nextQuestion], -1, this);
+
+        initializeHintButton(this.questions[nextQuestion].correct_answer);
     }
 
     /**
