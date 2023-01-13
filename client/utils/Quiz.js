@@ -1,4 +1,5 @@
 import { initializeHintButton, hideHintButton } from './hintButtonUtils';
+import { clearEvaluationMessage, setUpActionButton, finishQuiz } from './quizUtils';
 
 /**
  * The complete question
@@ -38,25 +39,6 @@ const displayQuestion = (question, selectedAnswer, quiz) => {
 	});
 }
 
-const finishQuiz = (score, maxScore, quiz) => {
-	let optionsContainer = document.querySelector('#options-wrapper');
-	let questionContainer = document.querySelector('#question');
-	let categoryContainer = document.querySelector('#category');
-	let evMessage = document.querySelector('#evaluation-message');
-    let actionButton = document.querySelector('#action-button');
-
-    optionsContainer.innerHTML = "";
-    questionContainer.innerHTML = "";
-    categoryContainer.innerHTML = "";
-
-    evMessage.innerHTML = `Your score is ${score}/${maxScore}!`;
-    actionButton.innerHTML = "Try again :)";
-    actionButton.onclick = () => quiz.restart();
-
-    hideHintButton();
-}
-
-
 export default class Quiz {
 
     /**
@@ -85,11 +67,7 @@ export default class Quiz {
         let firstQuestion = this.getNextQuestion();
         this.currentQuestion = firstQuestion;
         displayQuestion(this.questions[firstQuestion], -1, this);
-
-        let actionButton = document.querySelector('#action-button');
-        actionButton.innerHTML = "Next random question";
-        actionButton.onclick = () => { this.goToNextQuestion(); };
-
+        setUpActionButton("Next random question",  () => this.goToNextQuestion())
         initializeHintButton(this.questions[firstQuestion].correct_answer);
     }
 
@@ -100,18 +78,15 @@ export default class Quiz {
     goToNextQuestion() {
         let nextQuestion = this.getNextQuestion();
         if(this.isLastQuestion()) {
-            let actionButton = document.querySelector('#action-button');
-            actionButton.innerHTML = "Evaluate!";
-            actionButton.onclick = () => {
+            setUpActionButton("Evaluate!", () => {
                 let maxScore = this.questions.reduce((acc, next) => acc + next.score, 0);
                 // look at this beautiful reduce to calculate total score :)
                 let totalScore = this.questions.reduce((acc, next, i) => acc + (this.selectedAnswers[i] === next.correct_answer ? next.score : 0), 0);
-                finishQuiz(totalScore, maxScore, this);
-            }
+                finishQuiz(totalScore, maxScore, () => this.restart());
+            })
         }
         this.currentQuestion = nextQuestion;
         displayQuestion(this.questions[nextQuestion], -1, this);
-
         initializeHintButton(this.questions[nextQuestion].correct_answer);
     }
 
@@ -124,8 +99,7 @@ export default class Quiz {
     }
 
     restart() {
-        let evMessage = document.querySelector('#evaluation-message')
-        evMessage.innerHTML = "";
+        clearEvaluationMessage();
         this.selectedAnswers = this.questions.map(_ => -1);
         this.availableQuestions = [];
 
